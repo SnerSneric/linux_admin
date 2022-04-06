@@ -1,0 +1,109 @@
+ 1  pwd
+    2  clear
+    3  ls
+    4  pwd
+    5  cd  ..
+    6  ls
+    7  cd home
+    8  ls
+    9  cd ..
+   10  ls
+   11  docker
+   12  yum docker
+   13  yum install docker
+   14  docker
+   15  docker ps
+   16  systemctl start docker
+   17  docker ps
+   18  useradd cehi
+   19  passwd cehi
+   20  useradd -m cehi
+   21  ls
+   22  cd /home
+   23  ls
+   24  cd cehi
+   25  ls
+   26  cd /
+   27  ls
+   28  mkdir /home/cehi/.ssh
+   29  ls -a /home/cehi/
+   30  touch /home/cehi/.ssh/authorized_keys
+   31  vi /home/cehi/.ssh/authorized_keys
+   32  cat /home/cehi/.ssh/authorized_keys
+   33  cd /etc/
+   34  ls
+   35  cd ssh
+   36  ls
+   37  cat sshd_config
+   38  cat sshd_config | grep AllowUsers
+   39  cd /
+   40  groupadd docker
+   41  usermode -a -G docker cehi
+   42  usermod -a -G docker cehi
+   43  id cehi
+   44  newgrp docker
+   45  reboot
+   46  systemctl start docker
+   47  cd /home/cehi/
+   48  ls
+   49  mkdir docker_dir
+   50  ls
+   51  rmdir ti
+   52  rm ja
+   53  ls
+   54  ls -l /home
+   55  chmod 222 /home/cehi/
+   56  ls -l /home
+   57  chmod 444 /home/cehi/
+   58  ls
+   59  ls -l /home
+   60  chmod 070 /home/cehi/docker_dir/
+   61  ls -l /home/cehi/docker_dir/
+   62  ls -l /home/cehi/
+   63  paswd cehi
+   64  passwd cehi
+   65  ls -l
+   66  cd ..
+   67  ls -l /home
+   68  ls -al /home/cehi
+   69  chmod 666 /home/cehi
+   70  ls -al /home/cehi
+   71  chmod 750 /home/cehi
+   72  ls -al /home/cehi
+   73  chmod 550 /home/cehi
+   74  ls -al /home/cehi
+   75  chmod 770 /home/cehi/docker_dir/
+   76  ls -al /home/cehi
+   77  chown cehi@docker /home/cehi/docker_dir/
+   78  chown cehi /home/cehi/docker_dir/
+   79  ls -al /home/cehi
+   80  chown cehi:docker /home/cehi/docker_dir/
+   81  ls -al /home/cehi
+   82  chmod 000 /home/cehi/..
+   83  ls -al /home/cehi
+   84  cd ..
+   85  chmod 555 /home/cehi/..
+   86  cd ssh
+   87  ls
+   88  cd etc/ssh/
+   89  ls
+   90  vi sshd_config
+   91  cat sshd_config | grep port
+   92  cat sshd_config | grep Port 22
+   93  cat sshd_config | grep "Port 22"
+   94  cat sshd_config | grep -n "Port 22"
+   95  vi sshd_config
+   96  service ssh restart
+   97  systemctl restart ssh
+   98  systemctl restart sshd
+   99  vi sshd_config
+  100  systemctl restart sshd
+  101  journalctl -xe
+  102  semange port -l | grep ssh
+  103  semanage port -l | grep ssh
+  104  semanage port -a -t ssh_port_t -p tcp 1044
+  105  systemctl restart sshd
+  106  firewalld
+  107  firewall-cmd --zone=public --permanent --add-port=1044/tcp
+  108  firewall-cmd --reload
+  109  history

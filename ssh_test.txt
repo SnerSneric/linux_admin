@@ -1,0 +1,74 @@
+Greetings,
+
+I am writing thru "vim" right now, steps that are needed to allow user to login thru ssh.
+
+First thing that I did is, I made virtual private server on Linode. I made small machine, with 2 CPU, 4 Gb of RAM, and it is shared CPU.
+This is going to be just for testing purposes, so shared CPU is more then enought.
+
+After setting up VPS, we got clean Linux setup, in my case CentOS 7. 
+We are going to make a new user, and we won't give that user root persmission.
+
+Command used by me, "useradd <user_name>". We can add here a password for that user, entering command "passwd <user_name>". CLI will ask us to enter & to re-enter password for that user.
+
+By adding user, we have his home directory with hidden files ".bash*". We can check that entering command "ls -a". We can add here one more flag to see details "ls -al".
+
+We won't see there ".ssh" that we need to put public ssh of our user.
+
+Next step is to enter command "mkdir /home/user_name/.ssh". Typing command "ls -al" we will see that our directory has been maden.
+
+In that directory we need to make one file called "authorized_keys". We can do that with either getting into directory by "cd" command or entering full command "touch /home/user_name/authorized_keys"
+Extension is not priority needed.
+
+We can put ssh_key in that file with "vi" and paste it or using redirections.
+By redirections, we will enter "echo "ssh_key" > /home/user_name/authorized_keys".
+
+By doing that, we already can give an IP of VPS to our user and user_name so he can get connected.
+
+Now we can do some finesses, put minimum persmissions on user, change port on ssh connection and allow him to use just docker so far.
+
+Lets do docker first.
+Make check if docker got installed by entering command "docker ps". If we get error by bash, we need to install it. Othervise, we will get response with all docker images running.
+
+This is CentOS distribution, so installing docker goes, "yum docker install". After a while, we need to start a service entering command "systemctl start docker"
+Entering command "docker ps" should show docker active. So far, no images running.
+
+We will make new group, called docker, entering command "newgrp docker".
+
+We will add our user to that group with command "usermod -a -G docker <user_name>", and reboot our machine.
+
+Now, our user will be able to run docker without sudo permission. Of course, we will make him one directry where he can work on dockers.
+
+"mkdir docekr_dir" and we will change permissions on that directory. We will change owner of that, and allow rwx on owner and group.
+chown <user_name> /homer/<user_name/docekr_dir/
+chmod 770 /home/<user_name/docker_dir/
+
+We will need to change persmission on his mode directory. We will not allow him anything out of docker_dir.
+
+chmod 500 /home/<user_name>/
+
+Enought of permissions. Lets change port where VPS will listen to new connection.
+
+Default port on this, is port# 22. We have that on file in /etc/ssh/sshd_config.
+
+If we do cat on that file, somewhere on line 21 or 22 we will see something like this "#Port 22"
+
+Lets go into file with "vi" erase "#" and change "22" to "1044". So we said to ssh deamon to listen on port now on 1044.
+
+We need to update on service changes we made by restarting service, command "systemctl restart sshd"
+
+But, I've never expected to get an error, but I got one. I entered command "journalctl -xe" to see what was wrong.
+Error was about binding port "1024" by SELinux. Basically, internal security alarming something went wrong.
+
+Now we need to reconfigure that too. 
+
+"semanage port -l | grep ssh" will show us that SELinux permitted sshd to listen on port "22". 
+"semanage post -a -t ssh_port_t -p tcp 1044" will redirect connection to port 1044.
+
+Now, we can restart service of ssh deamon. "systemctl restart sshd"
+
+Because, we don't have port open on our external connection, we need to update "firewall" about this.
+
+"firewall-cmd --zone=public --permanent --add-port=1044/tcp"
+"firewall-cmd --reload"
+
+We are all set to connect to VPS on port "1044".
